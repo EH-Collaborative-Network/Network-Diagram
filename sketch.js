@@ -16,8 +16,8 @@ const cats = [
   "Author for Volume",
   "Artist for Volume",
   "Artist for Exhibition",
-  "RV Member",
-  "CoLing Member",
+  "Recovering Voices",
+  "CoLing",
   "Website Contributor",
   "Author for Spec. Edition",
   "Editorial Team for Volume"
@@ -181,9 +181,22 @@ function touchStarted() {
     })
 }
 
+function mousePressed() {
+  clicked = true
+  let mousePos = createVector(mouseX-width/2, mouseY-height/2)
+  nodes.forEach((node)=>{
+    if (mousePos.copy().sub(node.pos).mag() - closeNode.mass/(2 * PI) < mousePos.copy().sub(closeNode.pos).mag() - closeNode.mass/(2 * PI))
+      closeNode = node;
+  })
+}
+
 function touchEnded() {
     clicked = false
     lerpValue = 0.2
+}
+function mouseReleased() {
+  clicked = false
+  lerpValue = 0.2
 }
 
 function applyForces(nodes) {
@@ -266,14 +279,19 @@ Node.prototype.draw = function() {
   let h;
   let m;
   if(c == "#BCC2C3"){
-    textSize(14)
+    textSize(18)
     h = 18
     m = 4
+  }else if(c !== "#333"){
+    textSize(14)
+    h = 12
+    m = 2
   }else{
     textSize(10)
     h = 12
     m = 2
   }
+
   let w = textWidth(this.name);
   rect(this.pos.x, this.pos.y - m, w + 10, 20, 15)
   fill(51,51,51,255)
